@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Executor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h2>Execute SQL Query</h2>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Enter SQL Query:</label>
+            <textarea name="query" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Execute</button>
+    </form>
+
+    {% if result %}
+    <h3 class="mt-4">Query Result:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% for col in result[0].cursor_description %}
+                    <th>{{ col[0] }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in result %}
+                <tr>
+                    {% for col in row %}
+                        <td>{{ col }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</body>
+</html>
